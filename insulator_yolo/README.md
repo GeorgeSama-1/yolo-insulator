@@ -15,6 +15,40 @@ Reusable Ultralytics YOLO workflow for the IDID insulator defect dataset.
    - `PYTHONPATH=src python3 scripts/predict.py --config configs/predict.yaml`
    - `configs/predict.yaml` supports direct Ultralytics options such as `classes`, `iou`, and `max_det`.
 
+## Comparison Visualization
+
+Use the comparison tool when you want to inspect labeled samples side by side as:
+
+1. original image
+2. ground-truth annotations
+3. model prediction
+
+Default behavior:
+
+- reads the prepared YOLO dataset
+- uses the `val` split
+- samples `20` images deterministically
+- writes outputs under `artifacts/runs/comparisons/`
+
+Example:
+
+```bash
+PYTHONPATH=src python3 scripts/visualize_comparison.py --config configs/compare.yaml
+```
+
+Common overrides:
+
+```bash
+PYTHONPATH=src python3 scripts/visualize_comparison.py \
+  --config configs/compare.yaml \
+  --split train \
+  --limit 10 \
+  --weights /path/to/best.pt \
+  --save-dir artifacts/runs/comparisons/manual_check
+```
+
+This workflow complements validation metrics, but it does not replace quantitative evaluation such as mAP.
+
 ## Artifacts
 
 - Prepared dataset: `artifacts/processed/`
