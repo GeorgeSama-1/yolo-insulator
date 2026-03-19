@@ -1,42 +1,42 @@
 # Insulator YOLO
 
-Reusable Ultralytics YOLO workflow for the IDID insulator defect dataset.
+面向 IDID 绝缘子缺陷数据集的可复用 Ultralytics YOLO 工程。
 
-## Workflow
+## 工作流
 
-1. Prepare dataset
+1. 准备数据集
    - `PYTHONPATH=src python3 scripts/prepare_dataset.py --config configs/dataset.yaml`
-2. Train
+2. 训练
    - `PYTHONPATH=src python3 scripts/train.py --config configs/train.yaml`
-   - Extra Ultralytics training options can be set directly in `configs/train.yaml`, such as `amp`, `patience`, `cache`, and `cos_lr`.
-3. Validate
+   - 可以在 `configs/train.yaml` 中直接补充 Ultralytics 训练参数，例如 `amp`、`patience`、`cache`、`cos_lr`。
+3. 验证
    - `PYTHONPATH=src python3 scripts/validate.py --config configs/train.yaml --weights <weights>`
-4. Predict
+4. 推理
    - `PYTHONPATH=src python3 scripts/predict.py --config configs/predict.yaml`
-   - `configs/predict.yaml` supports direct Ultralytics options such as `classes`, `iou`, and `max_det`.
+   - `configs/predict.yaml` 支持直接透传 Ultralytics 推理参数，例如 `classes`、`iou`、`max_det`。
 
-## Comparison Visualization
+## 对比可视化
 
-Use the comparison tool when you want to inspect labeled samples side by side as:
+当你希望对带标注样本做人工核查时，可以使用对比可视化工具生成三栏图：
 
-1. original image
-2. ground-truth annotations
-3. model prediction
+1. 原图
+2. 真实标注
+3. 模型预测
 
-Default behavior:
+默认行为：
 
-- reads the prepared YOLO dataset
-- uses the `val` split
-- samples `20` images deterministically
-- writes outputs under `artifacts/runs/comparisons/`
+- 读取已经准备好的 YOLO 数据集
+- 默认使用 `val` 划分
+- 按固定随机种子稳定抽样 `20` 张图片
+- 输出写入 `artifacts/runs/comparisons/`
 
-Example:
+示例：
 
 ```bash
 PYTHONPATH=src python3 scripts/visualize_comparison.py --config configs/compare.yaml
 ```
 
-Common overrides:
+常见覆盖参数：
 
 ```bash
 PYTHONPATH=src python3 scripts/visualize_comparison.py \
@@ -47,9 +47,9 @@ PYTHONPATH=src python3 scripts/visualize_comparison.py \
   --save-dir artifacts/runs/comparisons/manual_check
 ```
 
-This workflow complements validation metrics, but it does not replace quantitative evaluation such as mAP.
+这个流程适合做人工定性检查，但不能替代 `mAP` 这类定量评估指标。
 
-## Artifacts
+## 产物目录
 
-- Prepared dataset: `artifacts/processed/`
-- Training runs: `artifacts/runs/`
+- 处理后的数据集：`artifacts/processed/`
+- 训练与推理输出：`artifacts/runs/`
