@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+.pytest_cache/
+.coverage
+
+insulator-defect-detection/
+insulator_yolo/artifacts/
+insulator_yolo/.pytest_cache/
+insulator_yolo/**/*.pyc
+insulator_yolo/**/*.pyo
+insulator_yolo/**/*.egg-info/

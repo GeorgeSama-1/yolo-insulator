@@ -1,0 +1,100 @@
+[
+  {
+    "filename": "100228.JPG",
+    "Labels": {
+      "objects": [
+        {
+          "name": "insulator",
+          "material": "porcelain",
+          "type": "unknown",
+          "conditions": {
+            "No issues": "No issues"
+          },
+          "string": 0,
+          "bbox": [
+            1,
+            1,
+            4,
+            4
+          ],
+          "comments": "none"
+        },
+        {
+          "name": "insulator",
+          "material": "porcelain",
+          "type": "unknown",
+          "conditions": {
+            "shell": "Broken"
+          },
+          "string": 0,
+          "bbox": [
+            5,
+            5,
+            3,
+            3
+          ],
+          "comments": "none"
+        },
+        {
+          "name": "insulator",
+          "material": "porcelain",
+          "type": "unknown",
+          "string": 1,
+          "bbox": [
+            0,
+            0,
+            10,
+            10
+          ],
+          "comments": "none"
+        }
+      ]
+    }
+  },
+  {
+    "filename": "100228h.JPG",
+    "Labels": {
+      "objects": [
+        {
+          "name": "insulator",
+          "material": "porcelain",
+          "type": "unknown",
+          "conditions": {
+            "glaze": "Flashover damage"
+          },
+          "string": 0,
+          "bbox": [
+            2,
+            2,
+            3,
+            3
+          ],
+          "comments": "none"
+        }
+      ]
+    }
+  },
+  {
+    "filename": "200001d.JPG",
+    "Labels": {
+      "objects": [
+        {
+          "name": "insulator",
+          "material": "porcelain",
+          "type": "unknown",
+          "conditions": {
+            "notbroken-notflashed": "notbroken-notflashed"
+          },
+          "string": 0,
+          "bbox": [
+            1,
+            1,
+            2,
+            2
+          ],
+          "comments": "none"
+        }
+      ]
+    }
+  }
+]

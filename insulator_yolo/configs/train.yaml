@@ -1,0 +1,9 @@
+model: yolo11n.pt
+dataset_yaml: /mnt/f/yolo-cls/insulator_yolo/artifacts/processed/dataset.yaml
+imgsz: 640
+epochs: 50
+batch: 8
+workers: 4
+device: cpu
+project: /mnt/f/yolo-cls/insulator_yolo/artifacts/runs
+name: baseline
