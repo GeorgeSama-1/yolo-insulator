@@ -91,9 +91,21 @@ def test_build_predict_kwargs_reads_confidence_and_source(tmp_path: Path) -> Non
 
     source_dir = tmp_path / "images"
     source_dir.mkdir()
-    config = {"source": str(source_dir), "conf": 0.4, "save": True}
+    config = {
+        "source": str(source_dir),
+        "conf": 0.4,
+        "save": True,
+        "iou": 0.5,
+        "max_det": 100,
+        "classes": [1, 2],
+        "weights": "weights/best.pt",
+    }
 
     kwargs = build_predict_kwargs(config)
 
     assert kwargs["source"] == str(source_dir)
     assert kwargs["conf"] == 0.4
+    assert kwargs["iou"] == 0.5
+    assert kwargs["max_det"] == 100
+    assert kwargs["classes"] == [1, 2]
+    assert "weights" not in kwargs

@@ -13,6 +13,7 @@ Reusable Ultralytics YOLO workflow for the IDID insulator defect dataset.
    - `PYTHONPATH=src python3 scripts/validate.py --config configs/train.yaml --weights <weights>`
 4. Predict
    - `PYTHONPATH=src python3 scripts/predict.py --config configs/predict.yaml`
+   - `configs/predict.yaml` supports direct Ultralytics options such as `classes`, `iou`, and `max_det`.
 
 ## Artifacts
 

@@ -1,6 +1,11 @@
 weights: /mnt/f/yolo-cls/insulator_yolo/artifacts/runs/baseline/weights/best.pt
 source: /mnt/f/yolo-cls/insulator-defect-detection/Test_IDID/Test
-conf: 0.25
+conf: 0.4
+iou: 0.5
+max_det: 100
+classes:
+  - 1
+  - 2
 save: true
 project: /mnt/f/yolo-cls/insulator_yolo/artifacts/runs
 name: predict

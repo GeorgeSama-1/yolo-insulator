@@ -3,16 +3,16 @@ from __future__ import annotations
 from typing import Any
 
 
+_PREDICT_CONFIG_RESERVED_KEYS = {"weights"}
+
+
 def build_predict_kwargs(config: dict[str, Any]) -> dict[str, Any]:
     kwargs = {
-        "source": config["source"],
-        "conf": config["conf"],
-        "save": config.get("save", True),
+        key: value
+        for key, value in config.items()
+        if key not in _PREDICT_CONFIG_RESERVED_KEYS
     }
-    if "project" in config:
-        kwargs["project"] = config["project"]
-    if "name" in config:
-        kwargs["name"] = config["name"]
+    kwargs.setdefault("save", True)
     return kwargs
 
 
