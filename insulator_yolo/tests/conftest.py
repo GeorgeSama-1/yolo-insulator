@@ -6,6 +6,10 @@ from pathlib import Path
 
 import pytest
 
+from insulator_yolo.data.source_dataset import load_source_annotations
+from insulator_yolo.data.split import assign_grouped_splits
+from insulator_yolo.data.yolo_export import export_dataset
+
 
 PNG_10X10 = base64.b64decode(
     "iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAIAAAACUFjqAAAAEklEQVR4nGP8z4APMOGVHbHSAEEsAROxCnMTAAAAAElFTkSuQmCC"
@@ -32,3 +36,20 @@ def sample_source_dataset(tmp_path: Path, fixture_labels_path: Path) -> tuple[Pa
     labels_path = dataset_root / "Train" / "labels_v1.2.json"
     labels_path.write_text(json.dumps(labels), encoding="utf-8")
     return dataset_root, labels_path
+
+
+@pytest.fixture
+def prepared_dataset_fixture(
+    tmp_path: Path, sample_source_dataset: tuple[Path, Path]
+) -> Path:
+    dataset_root, labels_path = sample_source_dataset
+    records = load_source_annotations(labels_path)
+    split_assignment = assign_grouped_splits(records, val_fraction=0.5, seed=7)
+    output_dir = tmp_path / "prepared"
+    export_dataset(
+        records=records,
+        split_assignment=split_assignment,
+        source_images_dir=dataset_root / "Train" / "Images",
+        output_dir=output_dir,
+    )
+    return output_dir
