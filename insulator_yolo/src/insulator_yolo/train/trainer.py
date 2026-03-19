@@ -4,17 +4,17 @@ from pathlib import Path
 from typing import Any
 
 
+_TRAIN_CONFIG_RESERVED_KEYS = {"model", "dataset_yaml", "data"}
+
+
 def build_train_kwargs(train_config: dict[str, Any], dataset_yaml_path: str | Path) -> dict[str, Any]:
-    return {
-        "data": str(dataset_yaml_path),
-        "imgsz": train_config["imgsz"],
-        "epochs": train_config["epochs"],
-        "batch": train_config["batch"],
-        "workers": train_config["workers"],
-        "device": train_config["device"],
-        "project": train_config["project"],
-        "name": train_config["name"],
+    kwargs = {
+        key: value
+        for key, value in train_config.items()
+        if key not in _TRAIN_CONFIG_RESERVED_KEYS
     }
+    kwargs["data"] = str(dataset_yaml_path)
+    return kwargs
 
 
 def train_model(train_config: dict[str, Any], dataset_yaml_path: str | Path) -> Any:

@@ -55,12 +55,22 @@ def test_build_train_kwargs_reads_expected_fields(tmp_path: Path) -> None:
         "device": "cpu",
         "project": "artifacts/runs",
         "name": "demo",
+        "amp": False,
+        "patience": 20,
+        "cache": True,
+        "cos_lr": True,
     }
 
     kwargs = build_train_kwargs(train_config, dataset_yaml)
 
     assert kwargs["data"] == str(dataset_yaml)
     assert kwargs["epochs"] == 10
+    assert kwargs["amp"] is False
+    assert kwargs["patience"] == 20
+    assert kwargs["cache"] is True
+    assert kwargs["cos_lr"] is True
+    assert "model" not in kwargs
+    assert "dataset_yaml" not in kwargs
 
 
 def test_build_val_kwargs_reads_weights_and_dataset(tmp_path: Path) -> None:

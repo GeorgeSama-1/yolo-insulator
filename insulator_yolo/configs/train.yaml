@@ -5,5 +5,7 @@ epochs: 50
 batch: 8
 workers: 4
 device: cpu
+amp: true
+patience: 20
 project: /mnt/f/yolo-cls/insulator_yolo/artifacts/runs
 name: baseline
