@@ -28,6 +28,7 @@
 - 读取已经准备好的 YOLO 数据集
 - 默认使用 `val` 划分
 - 按固定随机种子稳定抽样 `20` 张图片
+- 默认只显示缺陷类，不显示 `normal_insulator`
 - 输出写入 `artifacts/runs/comparisons/`
 
 示例：
