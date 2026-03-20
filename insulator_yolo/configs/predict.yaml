@@ -1,5 +1,5 @@
-weights: /mnt/f/yolo-cls/insulator_yolo/artifacts/runs/baseline/weights/best.pt
-source: /mnt/f/yolo-cls/insulator-defect-detection/Test_IDID/Test
+weights: /bwopt/MODELS/hj/VL/yolo-insulator/insulator_yolo/artifacts/runs/baseline_gpu_clean/weights/best.pt
+source: /bwopt/MODELS/hj/VL/data/insulator-defect-detection/Test_IDID/Test
 conf: 0.4
 iou: 0.5
 max_det: 100
@@ -7,5 +7,5 @@ classes:
   - 1
   - 2
 save: true
-project: /mnt/f/yolo-cls/insulator_yolo/artifacts/runs
-name: predict
+project: /bwopt/MODELS/hj/VL/yolo-insulator/insulator_yolo/artifacts/runs
+name: predict_defects_only

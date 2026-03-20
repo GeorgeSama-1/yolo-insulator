@@ -1,9 +1,9 @@
-prepared_root: /mnt/f/yolo-cls/insulator_yolo/artifacts/processed
-weights: /mnt/f/yolo-cls/insulator_yolo/artifacts/runs/baseline/weights/best.pt
+prepared_root: /bwopt/MODELS/hj/VL/yolo-insulator/insulator_yolo/artifacts/processed
+weights: /bwopt/MODELS/hj/VL/yolo-insulator/insulator_yolo/artifacts/runs/baseline_gpu_clean/weights/best.pt
 split: val
 limit: 20
 seed: 7
-output_dir: /mnt/f/yolo-cls/insulator_yolo/artifacts/runs/comparisons
+output_dir: /bwopt/MODELS/hj/VL/yolo-insulator/insulator_yolo/artifacts/runs/comparisons
 classes:
   - 1
   - 2

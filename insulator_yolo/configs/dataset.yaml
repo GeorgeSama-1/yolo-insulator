@@ -1,6 +1,6 @@
-source_dataset_root: /mnt/f/yolo-cls/insulator-defect-detection/Train_IDID_V1.2
-source_images_dir: Train/Images
-source_labels_path: Train/labels_v1.2.json
-output_dir: /mnt/f/yolo-cls/insulator_yolo/artifacts/processed
+source_dataset_root: /bwopt/MODELS/hj/VL/data/insulator-defect-detection
+source_images_dir: Train_IDID_V1.2/Train/Images
+source_labels_path: Train_IDID_V1.2/Train/labels_v1.2.json
+output_dir: /bwopt/MODELS/hj/VL/yolo-insulator/insulator_yolo/artifacts/processed
 val_fraction: 0.2
 seed: 7
