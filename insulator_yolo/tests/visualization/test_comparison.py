@@ -32,6 +32,50 @@ def test_parse_yolo_label_line_returns_pixel_box() -> None:
     assert box == [40, 60, 60, 140]
 
 
+def test_filter_boxes_by_classes_hides_normal_class() -> None:
+    from insulator_yolo.visualization.comparison import filter_boxes_by_classes
+
+    boxes = [
+        (0, [1, 1, 10, 10]),
+        (1, [2, 2, 11, 11]),
+        (2, [3, 3, 12, 12]),
+    ]
+
+    filtered = filter_boxes_by_classes(boxes, allowed_classes=[1, 2])
+
+    assert filtered == [
+        (1, [2, 2, 11, 11]),
+        (2, [3, 3, 12, 12]),
+    ]
+
+
+def test_filter_prediction_boxes_by_classes_hides_normal_class() -> None:
+    from insulator_yolo.visualization.comparison import filter_boxes_by_classes
+
+    boxes = [
+        (0, [1, 1, 10, 10], 0.99),
+        (1, [2, 2, 11, 11], 0.95),
+        (2, [3, 3, 12, 12], 0.88),
+    ]
+
+    filtered = filter_boxes_by_classes(boxes, allowed_classes=[1, 2])
+
+    assert filtered == [
+        (1, [2, 2, 11, 11], 0.95),
+        (2, [3, 3, 12, 12], 0.88),
+    ]
+
+
+def test_compute_render_style_scales_for_large_images() -> None:
+    from insulator_yolo.visualization.comparison import compute_render_style
+
+    style = compute_render_style((3680, 2456))
+
+    assert style["line_width"] > 2
+    assert style["title_height"] > 20
+    assert style["font_size"] > 10
+
+
 def test_prepared_dataset_fixture_has_images_and_labels(prepared_dataset_fixture: Path) -> None:
     assert (prepared_dataset_fixture / "images" / "val").exists()
     assert (prepared_dataset_fixture / "labels" / "val").exists()

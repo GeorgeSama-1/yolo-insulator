@@ -4,6 +4,9 @@ split: val
 limit: 20
 seed: 7
 output_dir: /mnt/f/yolo-cls/insulator_yolo/artifacts/runs/comparisons
+classes:
+  - 1
+  - 2
 conf: 0.4
 iou: 0.5
 max_det: 100

@@ -15,6 +15,38 @@ CLASS_COLORS = {
 }
 
 
+def filter_boxes_by_classes(
+    boxes: list[tuple[int, list[int]]] | list[tuple[int, list[int], float]],
+    allowed_classes: list[int] | None,
+) -> list[tuple[int, list[int]]] | list[tuple[int, list[int], float]]:
+    if not allowed_classes:
+        return boxes
+    allowed = set(allowed_classes)
+    return [box for box in boxes if box[0] in allowed]
+
+
+def compute_render_style(image_size: tuple[int, int]) -> dict[str, int]:
+    image_width, image_height = image_size
+    short_edge = min(image_width, image_height)
+    line_width = max(3, short_edge // 320)
+    font_size = max(14, short_edge // 90)
+    title_height = max(28, font_size + 12)
+    label_padding = max(3, font_size // 6)
+    return {
+        "line_width": line_width,
+        "font_size": font_size,
+        "title_height": title_height,
+        "label_padding": label_padding,
+    }
+
+
+def _load_font(font_size: int) -> ImageFont.FreeTypeFont | ImageFont.ImageFont:
+    try:
+        return ImageFont.truetype("DejaVuSans.ttf", font_size)
+    except OSError:
+        return ImageFont.load_default()
+
+
 def select_split_images(
     image_paths: list[Path], limit: int, seed: int
 ) -> list[Path]:
@@ -67,9 +99,14 @@ def _draw_panel(
 ) -> Image.Image:
     panel = image.copy().convert("RGB")
     draw = ImageDraw.Draw(panel)
-    font = ImageFont.load_default()
-    draw.rectangle([0, 0, panel.width - 1, 20], fill="black")
-    draw.text((4, 4), title, fill="white", font=font)
+    style = compute_render_style(panel.size)
+    font = _load_font(style["font_size"])
+    title_height = min(panel.height - 1, style["title_height"])
+    line_width = style["line_width"]
+    label_padding = style["label_padding"]
+
+    draw.rectangle([0, 0, panel.width - 1, title_height], fill="black")
+    draw.text((label_padding, label_padding), title, fill="white", font=font)
 
     for item in boxes:
         if len(item) == 2:
@@ -78,11 +115,26 @@ def _draw_panel(
         else:
             class_id, box, score = item
         color = CLASS_COLORS.get(class_id, "yellow")
-        draw.rectangle(box, outline=color, width=2)
+        draw.rectangle(box, outline=color, width=line_width)
         label = class_names.get(class_id, str(class_id))
         if score is not None:
             label = f"{label} {score:.2f}"
-        draw.text((box[0] + 2, max(22, box[1] + 2)), label, fill=color, font=font)
+        bbox = draw.textbbox((0, 0), label, font=font)
+        text_width = bbox[2] - bbox[0]
+        text_height = bbox[3] - bbox[1]
+        text_x = max(0, box[0] + label_padding)
+        max_text_x = max(0, panel.width - text_width - label_padding - 1)
+        max_text_y = max(0, panel.height - text_height - label_padding - 1)
+        text_x = min(text_x, max_text_x)
+        text_y = min(max(title_height + label_padding, box[1] + label_padding), max_text_y)
+        text_box = [
+            text_x - label_padding,
+            text_y - label_padding,
+            max(text_x - label_padding, min(panel.width - 1, text_x + text_width + label_padding)),
+            max(text_y - label_padding, min(panel.height - 1, text_y + text_height + label_padding)),
+        ]
+        draw.rectangle(text_box, fill=color)
+        draw.text((text_x, text_y), label, fill="white", font=font)
     return panel
 
 
@@ -153,12 +205,19 @@ def generate_comparisons(
     image_paths = sorted(image_dir.glob("*"))
     selected = select_split_images(image_paths, limit=limit, seed=seed)
     predictor_fn = predictor or _default_predictor_factory(weights_path, predict_kwargs)
+    allowed_classes = predict_kwargs.get("classes")
 
     generated: list[Path] = []
     for image_path in selected:
         image = Image.open(image_path)
-        gt_boxes = load_gt_boxes(label_dir / f"{image_path.stem}.txt", image.size)
-        pred_boxes = predictor_fn(image_path)
+        gt_boxes = filter_boxes_by_classes(
+            load_gt_boxes(label_dir / f"{image_path.stem}.txt", image.size),
+            allowed_classes=allowed_classes,
+        )
+        pred_boxes = filter_boxes_by_classes(
+            predictor_fn(image_path),
+            allowed_classes=allowed_classes,
+        )
         output_path = output_dir / comparison_output_name(image_path)
         save_comparison_image(
             image_path=image_path,
